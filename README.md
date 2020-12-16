@@ -17,7 +17,7 @@ git clone git@github.com:jay13jay/eigenVectorBot.git
 cd eigenVectorBot
 ```
 
-2) Create and activate virtual environment (optional)
+2) Create and activate virtual environment (optional) Note: program uses python3, so if not using a virtualenv please ensure you are using the python3 binary as python2 will not run
 ```bash
 virtualenv -p $(which python3) ~/eigenVectorBot_env
 source ~/eigenVectorBot_env/bin/activate
