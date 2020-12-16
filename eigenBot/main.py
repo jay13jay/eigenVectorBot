@@ -4,24 +4,30 @@ from pandas_datareader import DataReader
 import yfinance as yf
 import configparser
 
+# Define Constants
+startTime = dt.datetime(2012, 1, 1)
+endTime = dt.datetime(2013, 12, 31)
+prices = pd.DataFrame()
+
+
 def  getTickerQuotes(ticker):
   # Get historical stock data
   tick = yf.Ticker(ticker)
   # print(tick.info)
   # get historical market data
-  hist = tick.history(period="5d")
+  hist = tick.history(period="5d", start=startTime, end=endTime)
   return hist
 
 
 def loadConfig():
   config = configparser.ConfigParser()
-  config.read('../data/config.ini')
-  return config
+  config.read('data/config.ini')
+  tickers = config['TICKERS']
+  return config, tickers
 
 
 def createDataFrame(ticker):
   start, end = dt.datetime(2012, 1, 1), dt.datetime(2013, 12, 31)
-  # tickers = ['AAPL', 'YHOO','GOOG', 'MSFT','ALTR','WDC','KLAC'] # moved these to data/config.ini
   prices = pd.DataFrame()
 
   # for ticker in tickers:
@@ -33,15 +39,15 @@ def createDataFrame(ticker):
 
 
 if __name__ == "__main__":
-  print("main function called")
-  config = loadConfig()
-  tickers = config['TICKERS']
-
+  config, tickers = loadConfig()
+  
   numTicks = 1
-  hist = pd.DataFrame()
   for tick in tickers:
-    print("\n\nTicker %s:\t%s" % (numTicks, tick))
-    numTicks += 1
     data = getTickerQuotes(config['TICKERS'][tick])
-    print("Datatype:\t %s\nData Array:\n%s" % (type(data), data['Close']))
+    prices[tick] = DataReader(config['TICKERS'][tick],'yahoo', startTime, endTime).loc[:,'Close'] #S&P 500
+
+    # print("Datatype:\t %s\nData Array:\n%s" % (type(data), data['Close']))
+  print("Data:\n", prices.head())
+  returns = prices.pct_change()
+  print("Percent Change:\n", returns.head())
 
