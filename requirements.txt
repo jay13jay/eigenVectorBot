@@ -1,0 +1,6 @@
+pandas
+pandas-datareader
+matplotlib
+sklearn
+yfinance
+configparser
