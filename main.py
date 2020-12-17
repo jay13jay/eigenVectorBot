@@ -45,14 +45,31 @@ if __name__ == "__main__":
     eigenportfolio2 = pd.DataFrame(data= eigenportfolio_2, columns = ['Investment Weight'], index = tickers)
     
     # Plot
-    # %matplotlib inline
-    f = plt.figure()
+    # f = plt.figure()
         
-    ax = plt.subplot(121)
-    eigenportfolio.plot(kind='bar', ax=ax, legend=False)
-    plt.title("Max E.V. Eigenportfolio")
-    ax = plt.subplot(122)
-    eigenportfolio2.plot(kind='bar', ax=ax, legend=False)
-    plt.title("2nd E.V. Eigenportfolio")
+    # ax = plt.subplot(121)
+    # eigenportfolio.plot(kind='bar', ax=ax, legend=False)
+    # plt.title("Max E.V. Eigenportfolio")
+    # ax = plt.subplot(122)
+    # eigenportfolio2.plot(kind='bar', ax=ax, legend=False)
+    # plt.title("2nd E.V. Eigenportfolio")
+    # plt.show()
 
-    plt.show()
+    in_sample_ind = np.arange(0, (returns.shape[0]-training_period+1))
+    out_sample_ind = np.arange((returns.shape[0]-training_period+1), returns.shape[0])
+    
+    cumulative_returns = eigenBot.get_cumulative_returns_over_time(returns, eigenportfolio).values
+        
+    f = plt.figure(figsize=(10,4))
+    
+    ax = plt.subplot(121)
+    ax.plot(cumulative_returns[in_sample_ind], 'black')
+    ax.plot(out_sample_ind, cumulative_returns[out_sample_ind], 'r')
+    plt.title("Eigenportfolio")
+    
+    ax = plt.subplot(122)
+
+    # print(returns.loc)
+    plt.plot((((1+returns.loc[:,]).cumprod(axis=0))-1))
+    plt.title("AAPL")
+    # plt.show()

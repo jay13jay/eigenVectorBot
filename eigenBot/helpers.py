@@ -13,3 +13,7 @@ def loadConfig():
     config.read('data/config.ini')
     tickers = config['TICKERS']
     return config, tickers
+
+
+def get_cumulative_returns_over_time(sample, weights):
+    return (((1+sample).cumprod(axis=0))-1).dot(weights)
